@@ -7,14 +7,16 @@ import requests
 from requests.adapters import HTTPAdapter
 from requests.exceptions import ConnectionError
 from datetime import datetime
-conn = psycopg2.connect(host="localhost", database="testing", user="postgres", password="9664241907")
+# conn = psycopg2.connect(host="localhost", database="testing", user="postgres", password="9664241907")
+
+conn = psycopg2.connect(host="localhost", port=5433, database="postgres", user="admin", password="secret")
 if conn:
     print('Success!')
 else:
     print('An error has occurred.')
 cursor = conn.cursor()
 
-def create_tables(conn):
+def create_tables(conn):    
     sql_create = 'CREATE TABLE IF NOT EXISTS parking_info(parking_id SERIAL NOT NULL, ' \
                  'parking_name character varying(100) COLLATE pg_catalog."default",' \
                  ' parking_code integer NOT NULL,' \
@@ -42,12 +44,12 @@ def create_tables(conn):
     conn.commit()
 
 def parse_date(date,time,parking_date):
-    # print(date,time,parking_date)
+    # print(date,time,parking_date)    
     sql_date = 'select datetime, date from parking_updatetime where datetime = %s;'
     cursor.execute(sql_date, (parking_date,))
     conn.commit()
     row_date_count = cursor.rowcount
-    if row_date_count == 0:
+    if row_date_count == 0:        
         sql_insert_parking_update = 'insert into parking_updatetime(date, time, datetime) values(%s,%s,%s)'
         cursor.execute(sql_insert_parking_update, (date,time, parking_date))
         conn.commit()
@@ -69,16 +71,18 @@ def parse_value(value,parking_name):
 
 tl = Timeloop()
 @tl.job(interval=timedelta(seconds=1))
-def sample_job_every_1000s():
-    clear_output(wait=False)
+def sample_job_every_1000s():    
+    # clear_output(wait=False)
     try:
         url ='http://www.nicosia.org.cy/el-GR/rss/parkingspaces/'
+        import ssl
+        if hasattr(ssl, '_create_unverified_context'):
+            ssl._create_default_https_context = ssl._create_unverified_context
         import feedparser
-        feed = feedparser.parse(url)
+        feed = feedparser.parse(url)        
         create_tables(conn)
         i = 0
-        for post in feed.entries:
-            # print(post)
+        for post in feed.entries:            
             i+=1
             parking_id = post.id[-1:]
             parking_name = post.title
@@ -89,7 +93,9 @@ def sample_job_every_1000s():
             latitude = post.geolocation.split(',')[0]
             longitude = post.geolocation.split(',')[1]
             value = post.summary
+            print("ALKAKJSDjk")
             sql_create_first = 'select * from parking_info'
+            print("asfds")
             cursor.execute(sql_create_first,)
             row_count = cursor.rowcount
             if row_count < i:
