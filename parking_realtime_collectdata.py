@@ -93,9 +93,7 @@ def sample_job_every_1000s():
             latitude = post.geolocation.split(',')[0]
             longitude = post.geolocation.split(',')[1]
             value = post.summary
-            print("ALKAKJSDjk")
-            sql_create_first = 'select * from parking_info'
-            print("asfds")
+            sql_create_first = 'select * from parking_info'            
             cursor.execute(sql_create_first,)
             row_count = cursor.rowcount
             if row_count < i:
