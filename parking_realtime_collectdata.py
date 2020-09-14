@@ -7,9 +7,9 @@ import requests
 from requests.adapters import HTTPAdapter
 from requests.exceptions import ConnectionError
 from datetime import datetime
-conn = psycopg2.connect(host="localhost",options='-c statement_timeout=30s', database="testing", user="postgres", password="9664241907")
+# conn = psycopg2.connect(host="localhost",options='-c statement_timeout=30s', database="testing", user="postgres", password="9664241907")
 
-# conn = psycopg2.connect(host="localhost", options='-c statement_timeout=1000', port=5433, database="postgres", user="admin", password="secret")
+conn = psycopg2.connect(host="postgres", options='-c statement_timeout=30s', dbname="inicosia", user="admin", password="secret")
 if conn:
     print('Success!')
 else:

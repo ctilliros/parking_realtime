@@ -1,0 +1,16 @@
+version: '3'
+
+services:  
+  web:
+    build: "."
+    command: python -u parking_realtime_collectdata.py                
+    external_links:
+      - postgres
+    networks:
+      - mynet
+
+networks:
+  mynet:
+    external:
+      name: mynet      
+    # restart: "unless-stopped"          
