@@ -7,6 +7,7 @@ import requests
 from requests.adapters import HTTPAdapter
 from requests.exceptions import ConnectionError
 from datetime import datetime
+import sys
 # conn = psycopg2.connect(host="localhost",options='-c statement_timeout=30s', database="testing", user="postgres", password="9664241907")
 
 conn = psycopg2.connect(host="postgres", options='-c statement_timeout=30s', dbname="inicosia", user="admin", password="secret")
@@ -108,6 +109,7 @@ def sample_job_every_1000s():
 
     except ConnectionError as ce:
         print(ce)
+        sys.exit(1)        
 
 
 if __name__ == "__main__":

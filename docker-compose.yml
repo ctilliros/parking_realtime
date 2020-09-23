@@ -4,6 +4,7 @@ services:
   web:
     build: "."
     command: python -u parking_realtime_collectdata.py                
+    restart: always
     external_links:
       - postgres
     networks:
